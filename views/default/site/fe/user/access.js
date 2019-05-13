@@ -26,6 +26,9 @@ ngApp.controller('ctrlAccess', ['$scope', '$http', function($scope, $http) {
         $scope.supportLocalStorage = 'N';
         document.querySelector('[ng-model="data.uname"]').focus();
     }
+    $scope.openThirdAppUrl = function(thirdApp) {
+        location.href = '/rest/site/fe/user/login/byRegAndThird?thirdId=' + thirdApp.id;
+    }
     $scope.login = function() {
         if($scope.loginData.password) {
             $http.get('/rest/site/fe/user/login/checkPwdStrength?account=' + $scope.loginData.uname + '&password=' + $scope.loginData.password).success(function(rsp) {
@@ -136,6 +139,9 @@ ngApp.controller('ctrlAccess', ['$scope', '$http', function($scope, $http) {
         }).error(function(data, header, config, status) {
             $http.post('/rest/log/add', { src: 'site.fe.user.access', msg: JSON.stringify(arguments) });
             alert('操作失败：' + (data === null ? '网络不可用' : data));
+        });
+        $http.get('/rest/site/fe/user/login/thirdList').success(function(rsp) {
+            $scope.thirdApps = rsp.data;
         });
     });
 }]);
