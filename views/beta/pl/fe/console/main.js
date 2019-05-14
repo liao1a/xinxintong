@@ -309,12 +309,36 @@ define(['frame'], function(ngApp) {
             $scope.list(1);
         }, true);
     }]);
-    ngApp.provider.controller('ctrlApplication', ['$scope', '$uibModal', 'http2', function($scope, $uibModal, http2) {
+    ngApp.provider.controller('ctrlApplication', ['$scope', '$uibModal', 'http2', 'facListFilter', function($scope, $uibModal, http2, facListFilter) {
         $scope.openMatter = function() {
             if($scope.frameState.sid && $scope.frameState.sid!=='_coworker') {
                  location.href = '/rest/pl/fe/matter/ylylisten/preview?site=' + $scope.frameState.sid  +'&id=';
             }
         }
+        var _oPage, filter2;
+        $scope.page = _oPage = {};
+        $scope.list = function() {
+            var url,
+                t = (new Date * 1);
+
+            if (_oCriteria.bySite) {
+                
+            }
+        };
+        var _oCriteria;
+        $scope.criteria = _oCriteria = {
+            filter: {},
+            bySite: ''
+        };
+        $scope.filter = facListFilter.init(null, _oCriteria.filter);
+        $scope.$watch('frameState.sid', function(nv) {
+            if (!nv) return;
+            _oCriteria.bySite = nv;
+        });
+        $scope.$watch('criteria', function(nv) {
+            if (!nv) return;
+            $scope.list(1);
+        }, true);
     }]);
     ngApp.provider.controller('ctrlSiteSubscribe', ['$scope', '$uibModal', 'http2', 'facListFilter', function($scope, $uibModal, http2, facListFilter) {
         var _oFilter, _oPage;

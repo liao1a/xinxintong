@@ -246,9 +246,6 @@ define(['require', 'frame/RouteParam', 'frame/const'], function(require, RoutePa
             });
         };
         $scope.listSite();
-        http2.get('/rest/pl/fe/user/getGroup').then(function(rsp) {
-            $scope.userGroup = rsp.data;
-        });
         var isNavCollapsed = false;
         if (document.body.clientWidth <= 768) {
             isNavCollapsed = true;
