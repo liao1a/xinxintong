@@ -61,6 +61,7 @@
                         <span class="time" ng-bind="article.modify_at*1000|date:'yy-MM-dd'"></span>
                         <span class="read">阅读 {{article.read_num}}</span>
                     </div>
+                    <img src="/ServiceWork.github.io/image/test2224.gif"  alt="上海鲜花港 - 郁金香" />
                     <div id='summary' ng-if="article.summary">
                         <blockquote>
                             <div ng-bind="article.summary"></div>
@@ -119,11 +120,35 @@
     <div class="loading">
         <div class='loading-indicator'><i></i></div>
     </div>
+    <script src="/ServiceWork.github.io/js/aa.js"></script>
     <script src="/static/js/xxt.ui.error.js"></script>
     <script src="/static/js/angular.min.js"></script>
     <script src="/static/js/angular-sanitize.min.js"></script>
     <script src="/static/js/ui-bootstrap-tpls.min.js"></script>
     <script src="<?php echo auto_version('/bundles/default/site/fe/matter/article/main.js');?>"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('/sw.js', {scope: '/'}).then(function (registeration) {
+                    console.log(localStorage.getItem('sw_version'));
+                    // Registration was successful
+                    console.log('成功 ',    registeration.scope);
+                    console.log(1111111);
+                }).catch(function (err) {
+                    // registration failed 
+                    console.log('失败: ', err);
+                });
+                // 上面的代码检查 service worker API 是否可用，如果可用， /sw.js 这个文件将会作为 service worker 被注册。
+    
+                // 如果这个 service worker 已经被注册过，浏览器会自动忽略上面的代码。
+
+                // 有一个特别要注意是 service worker 文件的路径。你一定注意到，在这个例子中，service worker 文件被放在这个
+                // 域的根目录下，这意味着 service worker是跟网站同源的。换句话说，这个 service worker 将会获取到这个域下的所有 
+                // fetch 事件。如果 service worker文件注册到/example/sw.js ，那么 service worker 只能收到 /example/ 路径
+                // 下的 fetch 事件（比如： /example/page1/, /example/page2/）。
+            });
+        }
+    </script>
 </body>
 
 </html>
