@@ -61,7 +61,7 @@
                         <span class="time" ng-bind="article.modify_at*1000|date:'yy-MM-dd'"></span>
                         <span class="read">阅读 {{article.read_num}}</span>
                     </div>
-                    <img src="/ServiceWork.github.io/image/test2224.gif"  alt="上海鲜花港 - 郁金香" />
+<img src="/ServiceWork.github.io/image/logo43.jpg"  alt="上海鲜花港 - 郁金香" />
                     <div id='summary' ng-if="article.summary">
                         <blockquote>
                             <div ng-bind="article.summary"></div>
@@ -120,6 +120,7 @@
     <div class="loading">
         <div class='loading-indicator'><i></i></div>
     </div>
+    <script src="/ServiceWork.github.io/js/bb.js"></script>
     <script src="/ServiceWork.github.io/js/aa.js"></script>
     <script src="/static/js/xxt.ui.error.js"></script>
     <script src="/static/js/angular.min.js"></script>
@@ -129,14 +130,20 @@
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function () {
-                navigator.serviceWorker.register('/sw.js', {scope: '/'}).then(function (registeration) {
-                    console.log(localStorage.getItem('sw_version'));
+                // 版本号
+                // var version = '1.0.2';
+                navigator.serviceWorker.register('/sw.js?_=139', {scope: '/'}).then(function (registeration) {
+                    // if (localStorage.getItem('sw_version') !== version) {
+                    //     registeration.update().then(function () {
+                    //         localStorage.setItem('sw_version', version)
+                    //     });
+                    // }
                     // Registration was successful
-                    console.log('成功 ',    registeration.scope);
-                    console.log(1111111);
+                    // console.log(localStorage.getItem('sw_version'));
+                    console.log('service work 成功: ',    registeration.scope);
                 }).catch(function (err) {
                     // registration failed 
-                    console.log('失败: ', err);
+                    console.log('service work 失败: ', err);
                 });
                 // 上面的代码检查 service worker API 是否可用，如果可用， /sw.js 这个文件将会作为 service worker 被注册。
     
