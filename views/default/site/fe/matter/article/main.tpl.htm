@@ -132,7 +132,8 @@
             window.addEventListener('load', function () {
                 // 版本号
                 // var version = '1.0.2';
-                navigator.serviceWorker.register('/sw.js?_=139', {scope: '/'}).then(function (registeration) {
+                // navigator.serviceWorker.register('/sw.js?_=1.06', {scope: '/views/default/site/fe/matter/article'}).then(function (registeration) {
+                navigator.serviceWorker.register('/sw.js?_=1.07', {scope: '/'}).then(function (registeration) {
                     // if (localStorage.getItem('sw_version') !== version) {
                     //     registeration.update().then(function () {
                     //         localStorage.setItem('sw_version', version)
@@ -140,7 +141,14 @@
                     // }
                     // Registration was successful
                     // console.log(localStorage.getItem('sw_version'));
-                    console.log('service work 成功: ',    registeration.scope);
+                    // console.log('service work 成功: ',    registeration.scope);
+                    if(registeration.installing) {
+                        console.log('Service worker installing');
+                    } else if(registeration.waiting) {
+                        console.log('Service worker installed');
+                    } else if(registeration.active) {
+                        console.log('Service worker active');
+                    }
                 }).catch(function (err) {
                     // registration failed 
                     console.log('service work 失败: ', err);

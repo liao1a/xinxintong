@@ -1,5 +1,5 @@
 // The files we want to cache
-var CACHE_NAME = 'article-15';
+var CACHE_NAME = 'article-24';
 var baseUrl = '/static/js/';
 var urlsToCache = [
   baseUrl + 'xxt.ui.error.js',
@@ -15,10 +15,24 @@ self.addEventListener('install', function (event) {
     event.waitUntil(
         caches.open(CACHE_NAME)
         .then(function (cache) {
-            console.log('addcach');
-            return cache.addAll(urlsToCache);
+            // console.log('addcach');
+            // return cache.addAll(urlsToCache);
+            cache.addAll(urlsToCache).then(function () {
+                console.log('addcach');
+            });
         }),
         self.skipWaiting()
+        // 清理旧版本 
+        // caches.keys().then(function (cacheList) { 
+        //     return Promise.all( 
+        //         cacheList.map(function (cacheName) { 
+        //             if (cacheName !== 'two') { 
+        //                 console.log('清理',cacheName); 
+        //                 return caches.delete(cacheName); 
+        //             } 
+        //         }) 
+        //     ); 
+        // })
     );
 });
 
@@ -54,12 +68,14 @@ self.addEventListener('fetch', function (event) {
                 console.log('没有', event.request.url);
                 return fetch(event.request);
             }
-
+            
             // var fetchRequest = event.request.clone();
-
+            
             // return fetch(fetchRequest).then(
             //     function (response) {
+            //         console.log('没有22222', event.request.url);
             //         // Check if we received a valid response
+            //         console.log(response.type);
             //         if (!response || response.status !== 200 || response.type !== 'basic') {
             //             return response;
             //         }
