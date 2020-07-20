@@ -3,6 +3,8 @@ node_modules/
 cus/
 kcfinder/upload
 vendor/
+*.log
 #ue/
 docker/mariadb/data
 docker-compose.override.yml
+

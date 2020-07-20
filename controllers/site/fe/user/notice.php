@@ -9,6 +9,14 @@ require_once dirname(dirname(__FILE__)) . '/base.php';
 class notice extends \site\fe\base
 {
   /**
+   * 显示给最终用户的字段
+   */
+  const SITE_FE_FIELDS = 'id,close_at,batch_id';
+  /**
+   * 显示给最终用户的字段
+   */
+  const SITE_FE_BATCH_FIELDS = 'id,create_at,remark,params,send_from';
+  /**
    *
    */
   public function index_action()
@@ -27,7 +35,7 @@ class notice extends \site\fe\base
     }
 
     $q = [
-      'id,batch_id,close_at,data,status',
+      self::SITE_FE_FIELDS,
       'xxt_log_tmplmsg_detail',
       ["siteid" => $this->siteId, "userid" => $user->uid],
     ];
@@ -43,14 +51,21 @@ class notice extends \site\fe\base
           $log->data = json_decode($log->data);
         }
         if ($log->batch_id) {
-          if ($log->batch = $modelBat->byId($log->batch_id, ['fields' => 'create_at,remark,params'])) {
-            if (!empty($log->batch->params)) {
-              $log->batch->params = json_decode($log->batch->params);
-              if (!empty($log->batch->params->url)) {
-                $log->batch->remark .= "\n<a href = " . $log->batch->params->url . ">查看详情</a>";
+
+          if ($batch = $modelBat->byId($log->batch_id, ['fields' => self::SITE_FE_BATCH_FIELDS])) {
+            if (!empty($batch->params)) {
+              $batch->params = json_decode($batch->params);
+              if (!empty($batch->params->url)) {
+                $batch->remark .= "\n<a href = " . $batch->params->url . ">查看详情</a>";
               }
             }
           }
+          if (!empty($batch->send_from)) {
+            list($type, $id) = explode(':', $batch->send_from);
+            $model = $this->model('matter\\' . $type);
+            $batch->send_from = $model->byId($id, ['fields' => 'id,title,summary,pic', 'cascaded' => 'F']);
+          }
+          $log->batch = $batch;
         }
       }
     }
@@ -76,7 +91,7 @@ class notice extends \site\fe\base
     $modelTmplBat = $this->model('matter\tmplmsg\batch');
 
     $q = [
-      '*',
+      self::SITE_FE_FIELDS,
       'xxt_log_tmplmsg_detail',
       ['siteid' => $site, 'userid' => $user->uid, 'close_at' => 0],
     ];
@@ -89,12 +104,17 @@ class notice extends \site\fe\base
       if (!empty($log->data)) {
         $log->data = json_decode($log->data);
       }
-      if ($batch = $modelTmplBat->byId($log->batch_id)) {
+      if ($batch = $modelTmplBat->byId($log->batch_id, ['fields' => self::SITE_FE_BATCH_FIELDS])) {
         if (!empty($batch->params)) {
           $batch->params = json_decode($batch->params);
           if (!empty($batch->params->url)) {
             $batch->remark .= "\n<a href = " . $batch->params->url . ">查看详情</a>";
           }
+        }
+        if (!empty($batch->send_from)) {
+          list($type, $id) = explode(':', $batch->send_from);
+          $model = $this->model('matter\\' . $type);
+          $batch->send_from = $model->byId($id, ['fields' => 'id,title,summary,pic', 'cascaded' => 'F']);
         }
       }
       $log->batch = $batch;
