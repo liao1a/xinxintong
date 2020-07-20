@@ -1,12 +1,10 @@
 <template>
-  <tms-flex direction="column" class="notice">
-    <div>
-      <van-tabs v-model="noticeScope" @change="onChangeNoticeScope">
-        <van-tab name="unclose" title="未关闭"></van-tab>
-        <van-tab name="all" title="全部"></van-tab>
-      </van-tabs>
-      <mis-notice :notices="notices" v-on:notice-close="closeNotice" />
-    </div>
+  <tms-flex direction="column" class="tms-flex__notice">
+    <van-tabs type="card" v-model="noticeScope" @change="onChangeNoticeScope">
+      <van-tab name="unclose" title="待处理"></van-tab>
+      <van-tab name="all" title="全部"></van-tab>
+    </van-tabs>
+    <mis-notice :notices="notices" v-on:notice-close="closeNotice" />
     <van-button type="default" block v-if="batchDone===false" @click="moreNotice">
       更多
       <span v-if="batch&&batch.total">
@@ -46,12 +44,13 @@ export default {
         this.batchDone = done
         result.logs.forEach(log => {
           const { id, close_at, batch } = log
-          const { create_at, remark } = batch
+          const { create_at, remark, send_from } = batch
           this.notices.push({
             id,
             close_at,
             createAt: moment(create_at * 1000).format('YYYY-MM-DD HH:mm'),
-            remark
+            remark,
+            app: { pic: send_from ? send_from.pic : '' }
           })
         })
       })
@@ -90,3 +89,18 @@ export default {
   }
 }
 </script>
+
+<style lang="less">
+.tms-flex__notice {
+  .van-tabs__nav--card {
+    .van-tab {
+      color: @brand-primary;
+      border: 1px solid @brand-primary-outline;
+    }
+    .van-tab.van-tab--active {
+      color: @brand-primary-text;
+      background-color: @brand-primary;
+    }
+  }
+}
+</style>

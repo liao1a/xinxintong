@@ -25,18 +25,18 @@ class main extends \site\fe\matter\base
 
     $this->checkEntryRule($oMission, true);
 
-    if ($version === 'new')
-      $this->redirect("/ue/site/fe/mission?site={$oMission->siteid}&mission={$oMission->id}");
-    else {
-      switch ($page) {
-        case 'board':
-          \TPL::output('/site/fe/matter/mission/board');
-          break;
-        default:
-          \TPL::output('/site/fe/matter/mission/main');
-      }
-      exit;
-    }
+    //if ($version === 'new')
+    $this->redirect("/ue/site/fe/mission?site={$oMission->siteid}&mission={$oMission->id}");
+    // else {
+    //   switch ($page) {
+    //     case 'board':
+    //       \TPL::output('/site/fe/matter/mission/board');
+    //       break;
+    //     default:
+    //       \TPL::output('/site/fe/matter/mission/main');
+    //   }
+    //   exit;
+    // }
   }
   /**
    * 获得进入规则
@@ -61,7 +61,7 @@ class main extends \site\fe\matter\base
   {
     $oUser = $this->who;
 
-    $oMission = $this->model('matter\mission')->byId($mission, ['fields' => 'id,title,summary,pic,user_app_id,user_app_type']);
+    $oMission = $this->model('matter\mission')->byId($mission, ['fields' => 'siteid,id,title,summary,pic,user_app_id,user_app_type,page_config']);
     if (false === $oMission) {
       return new \ObjectNotFoundError();
     }
