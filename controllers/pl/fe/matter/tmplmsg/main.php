@@ -192,7 +192,7 @@ class main extends \pl\fe\matter\base
       $url .= "modify?bucket={$site}&code={$config->tms_msg_wx_channel_code}";
     }
 
-    $posted = ["title" => $config->title, "appid" => $config->appid, "appsecret" => $config->appsecret];
+    $posted = ["title" => $config->title, "appid" => $config->appid, "appsecret" => $config->appsecret, "token" => $config->token];
     list($success, $rsp) = tmsHttpPost($url, $posted);
     if ($success !== true) return new \ResponseError($rsp);
     if ($rsp->code !== 0) {
