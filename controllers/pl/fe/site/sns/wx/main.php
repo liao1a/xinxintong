@@ -74,8 +74,19 @@ class main extends \pl\fe\base
       return new \ResponseTimeout();
     }
 
-    $site = $this->model('sns\wx')->bySite($site);
+    $joined = "N";
+    $siteObj = $this->model('sns\wx')->bySite($site);
+    if ($siteObj) {
+      if (defined('TMS_MESSENGER_BACK_ADDRESS') && !empty($siteObj->tms_msg_wx_channel_code)) {
+        $url = TMS_MESSENGER_BACK_ADDRESS . "/admin/channel/wxmp/get";
+        $url .= "?bucket={$siteObj->siteid}&code={$siteObj->tms_msg_wx_channel_code}";
+        list($success, $rsp) = tmsHttpGet($url);
+        if ($success === true && $rsp->code == 0) {
+          $joined = isset($rsp->result->joined) ? $rsp->result->joined : "N";
+        }
+      } else $joined = $siteObj->joined;
+    }
 
-    return new \ResponseData($site->joined);
+    return new \ResponseData($joined);
   }
 }
